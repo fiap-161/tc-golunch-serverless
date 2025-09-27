@@ -1,0 +1,29 @@
+# Example terraform.tfvars for serverless deployment
+# Copy to terraform.tfvars and fill in your values
+
+# Basic Configuration
+aws_region         = "us-east-1"
+runtime            = "nodejs20.x"
+log_retention_days = 30
+lambda_role_name   = "LabRole"
+
+# API Gateway Configuration
+api_name   = "unified-api-gateway"
+stage_name = "prod"
+
+# Environment
+environment = "prod"
+
+# Cognito Configuration
+cognito_user_pool_name = "unified-api-user-pool"
+cognito_callback_urls  = ["https://your-frontend-domain.com/callback"]
+cognito_logout_urls    = ["https://your-frontend-domain.com/logout"]
+
+# JWT secret key (generate a secure random string)
+# This should be set as a GitHub secret, not in this file
+jwt_secret_key = "your-secure-jwt-secret-key-here"
+
+# NLB ARN from terraform-infra output
+# This will be automatically passed from the terraform-infra job output
+# You don't need to set this manually - it's handled by the GitHub Actions workflow
+nlb_arn = "will-be-passed-from-terraform-infra-output"
