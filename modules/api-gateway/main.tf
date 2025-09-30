@@ -134,7 +134,7 @@ resource "aws_apigatewayv2_integration" "golang_api" {
 
   integration_type   = "HTTP_PROXY"
   integration_method = "ANY"
-  integration_uri    = var.nlb_listener_arn  # Must use ELB listener ARN for VPC Link
+  integration_uri    = var.nlb_listener_arn # Must use ELB listener ARN for VPC Link
   connection_type    = "VPC_LINK"
   connection_id      = aws_apigatewayv2_vpc_link.golang_api_vpc_link.id
 

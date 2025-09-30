@@ -36,7 +36,7 @@ resource "aws_cognito_user_pool_client" "main" {
   allowed_oauth_scopes                 = ["phone", "email", "openid", "profile", "aws.cognito.signin.user.admin"]
   callback_urls                        = var.callback_urls
   logout_urls                          = var.logout_urls
-  
+
   explicit_auth_flows = [
     "ALLOW_ADMIN_USER_PASSWORD_AUTH",
     "ALLOW_USER_PASSWORD_AUTH",

@@ -116,8 +116,8 @@ module "api_gateway" {
 
   # NLB for VPC Link to EKS - using data from terraform-infra
   nlb_arn                    = data.terraform_remote_state.infra.outputs.nlb_arn
-  nlb_listener_arn          = data.terraform_remote_state.infra.outputs.nlb_listener_arn
-  vpc_id                    = data.terraform_remote_state.infra.outputs.vpc_id
-  private_subnet_ids        = data.terraform_remote_state.infra.outputs.private_subnet_ids
+  nlb_listener_arn           = data.terraform_remote_state.infra.outputs.nlb_listener_arn
+  vpc_id                     = data.terraform_remote_state.infra.outputs.vpc_id
+  private_subnet_ids         = data.terraform_remote_state.infra.outputs.private_subnet_ids
   vpc_link_security_group_id = data.terraform_remote_state.infra.outputs.vpc_link_security_group_id
 }
