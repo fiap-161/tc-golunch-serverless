@@ -24,6 +24,5 @@ cognito_logout_urls    = ["https://your-frontend-domain.com/logout"]
 # jwt_secret_key = "will-be-passed-from-github-secret"
 
 # NLB ARN from terraform-infra output
-# This will be automatically passed from the terraform-infra job output
-# You don't need to set this manually - it's handled by the GitHub Actions workflow
-nlb_arn = "will-be-passed-from-terraform-infra-output"
+# This will be automatically retrieved from the terraform-infra remote state
+# No need to set this manually - it's handled by data.terraform_remote_state

@@ -68,3 +68,27 @@ variable "jwt_secret_key" {
 }
 
 # NLB variables removed - now using data source from terraform-infra
+
+variable "project_name" {
+  description = "Project name"
+  type        = string
+  default     = "golunch"
+}
+
+variable "domain_name" {
+  description = "Domain name for the API"
+  type        = string
+  default     = ""
+}
+
+variable "hosted_zone_id" {
+  description = "Route53 hosted zone ID"
+  type        = string
+  default     = ""
+}
+
+variable "certificate_arn" {
+  description = "ACM certificate ARN"
+  type        = string
+  default     = ""
+}
