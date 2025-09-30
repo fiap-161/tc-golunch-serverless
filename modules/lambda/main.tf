@@ -30,7 +30,7 @@ resource "aws_lambda_function" "lambda_function" {
     variables = {
       COGNITO_USER_POOL_ID = var.cognito_user_pool_id
       COGNITO_CLIENT_ID    = var.cognito_client_id
-      JWT_SECRET_KEY       = var.jwt_secret_key
+      SECRET_KEY           = var.secret_key
     }
   }
 }

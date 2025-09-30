@@ -54,8 +54,8 @@ variable "source_file" {
   type        = string
 }
 
-variable "jwt_secret_key" {
-  description = "JWT secret key for signing tokens"
+variable "secret_key" {
+  description = "Secret key for signing tokens"
   type        = string
   sensitive   = true
 }

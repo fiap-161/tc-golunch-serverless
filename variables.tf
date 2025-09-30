@@ -61,8 +61,8 @@ variable "cognito_logout_urls" {
   default     = ["http://localhost:3000"]
 }
 
-variable "jwt_secret_key" {
-  description = "JWT secret key for signing tokens"
+variable "secret_key" {
+  description = "Secret key for signing tokens"
   type        = string
   sensitive   = true
 }

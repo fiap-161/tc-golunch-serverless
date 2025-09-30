@@ -43,7 +43,7 @@ jobs:
       - name: Terraform Apply
         run: |
           terraform apply -auto-approve \
-            -var="jwt_secret_key=${{ secrets.JWT_SECRET_KEY }}"
+            -var="secret_key=${{ secrets.SECRET_KEY }}"
 
       - name: Get API Gateway URL
         id: api_url
