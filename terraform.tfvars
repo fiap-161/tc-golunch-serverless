@@ -20,8 +20,8 @@ cognito_callback_urls  = ["https://your-frontend-domain.com/callback"]
 cognito_logout_urls    = ["https://your-frontend-domain.com/logout"]
 
 # JWT secret key is provided via GitHub Actions workflow
-# using the JWT_SECRET_KEY GitHub secret - do not set this here
-# jwt_secret_key = "will-be-passed-from-github-secret"
+# using the SECRET_KEY GitHub secret - do not set this here
+# secret_key = "will-be-passed-from-github-secret"
 
 # NLB ARN from terraform-infra output
 # This will be automatically retrieved from the terraform-infra remote state

@@ -21,7 +21,7 @@ cognito_logout_urls    = ["https://your-frontend-domain.com/logout"]
 
 # JWT secret key (generate a secure random string)
 # This should be set as a GitHub secret, not in this file
-jwt_secret_key = "your-secure-jwt-secret-key-here"
+secret_key = "your-secure-jwt-secret-key-here"
 
 # NLB ARN from terraform-infra output
 # This will be automatically passed from the terraform-infra job output

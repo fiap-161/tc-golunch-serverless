@@ -26,7 +26,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      hashicorp-learn = "lambda-api-gateway"
+      tc-golunch-serverless = "lambda-api-gateway"
     }
   }
 }
@@ -35,7 +35,7 @@ provider "aws" {
 data "terraform_remote_state" "infra" {
   backend = "s3"
   config = {
-    bucket = "terraform-state-934954943528-golunch-infra"
+    bucket = "s3-golunch-infra"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
