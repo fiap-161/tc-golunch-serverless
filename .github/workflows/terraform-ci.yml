@@ -1,0 +1,91 @@
+name: Terraform CI - Serverless
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  terraform:
+    name: Terraform Validate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Ensure backend bucket exists
+        run: ./create_backend_bucket.sh
+
+      - name: Terraform Init
+        run: terraform init -reconfigure
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Check if infrastructure state exists
+        id: infra_check
+        run: |
+          if aws s3api head-object --bucket "s3-golunch-infra" --key "terraform.tfstate" 2>/dev/null; then
+            echo "infra_state_exists=true" >> $GITHUB_OUTPUT
+            echo "✅ Infrastructure state found - can proceed with plan"
+          else
+            echo "infra_state_exists=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Infrastructure state not found - skipping plan"
+          fi
+
+      - name: Terraform Plan
+        if: steps.infra_check.outputs.infra_state_exists == 'true'
+        run: |
+          terraform plan -input=false \
+            -var="secret_key=dummy-secret-for-validation"
+
+      - name: Validate Lambda Functions
+        run: |
+          echo "🔍 Checking Lambda function sources..."
+          if [ -d "auth" ]; then
+            echo "✅ Auth directory found"
+            for func in register login anonymous; do
+              if [ -f "auth/${func}.js" ]; then
+                echo "✅ ${func}.js found"
+              else
+                echo "❌ ${func}.js missing"
+                exit 1
+              fi
+            done
+          else
+            echo "❌ Auth directory missing"
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          echo "🎉 All validations passed!"
+          echo "📝 Checks performed:"
+          echo "  ✅ Terraform format"
+          echo "  ✅ Terraform syntax validation"
+          echo "  ✅ Lambda function sources"
+          if [ "${{ steps.infra_check.outputs.infra_state_exists }}" == "true" ]; then
+            echo "  ✅ Terraform plan (with infrastructure)"
+          else
+            echo "  ⚠️ Terraform plan (skipped - no infrastructure)"
+          fi
+          echo ""
+          echo "🚀 Ready for merge!"

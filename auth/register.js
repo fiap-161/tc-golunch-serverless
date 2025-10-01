@@ -16,9 +16,9 @@ function generateJWTToken(userID, userType, additionalClaims = {}) {
     custom: additionalClaims
   };
 
-  const secretKey = process.env.JWT_SECRET_KEY;
+  const secretKey = process.env.SECRET_KEY;
   if (!secretKey) {
-    throw new Error("JWT_SECRET_KEY environment variable is required");
+    throw new Error("SECRET_KEY environment variable is required");
   }
 
   return jwt.sign(claims, secretKey, { algorithm: 'HS256' });
