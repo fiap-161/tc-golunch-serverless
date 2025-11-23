@@ -14,7 +14,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "api-gateway-bucket"
+    bucket = "api-gateway-bucket-serverless"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -35,7 +35,7 @@ provider "aws" {
 data "terraform_remote_state" "infra" {
   backend = "s3"
   config = {
-    bucket = "s3-golunch-infra"
+    bucket = "s3-golunch-infra-terraform-fiap"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }

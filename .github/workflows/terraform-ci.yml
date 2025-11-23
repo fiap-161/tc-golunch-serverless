@@ -43,7 +43,7 @@ jobs:
       - name: Check if infrastructure state exists
         id: infra_check
         run: |
-          if aws s3api head-object --bucket "s3-golunch-infra" --key "terraform.tfstate" 2>/dev/null; then
+          if aws s3api head-object --bucket "s3-golunch-infra-terraform-fiap" --key "terraform.tfstate" 2>/dev/null; then
             echo "infra_state_exists=true" >> $GITHUB_OUTPUT
             echo "✅ Infrastructure state found - can proceed with plan"
           else

@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Variáveis
 REGION="us-east-1"
-BUCKET_NAME="api-gateway-bucket"
+BUCKET_NAME="api-gateway-bucket-serverless"
 
 # Verifica se o bucket já existe
 if aws s3api head-bucket --bucket "$BUCKET_NAME" 2>/dev/null; then
