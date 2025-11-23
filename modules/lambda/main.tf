@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "lambda_bucket" {
-  bucket = "golunch-lambda-functions"
+  bucket = "golunch-lambda-functions-serverless"
 }
 
 # Bucket ownership and ACL simplified - using defaults
