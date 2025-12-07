@@ -73,3 +73,24 @@ variable "vpc_link_security_group_id" {
   description = "Security Group ID for VPC Link"
   type        = string
 }
+
+# Admin Lambda Functions
+variable "admin_register_lambda_invoke_arn" {
+  description = "ARN to invoke the Admin Register Lambda function"
+  type        = string
+}
+
+variable "admin_register_lambda_function_name" {
+  description = "Name of the Admin Register Lambda function"
+  type        = string
+}
+
+variable "admin_login_lambda_invoke_arn" {
+  description = "ARN to invoke the Admin Login Lambda function"
+  type        = string
+}
+
+variable "admin_login_lambda_function_name" {
+  description = "Name of the Admin Login Lambda function"
+  type        = string
+}
