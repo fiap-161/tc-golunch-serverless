@@ -55,7 +55,7 @@ resource "aws_cognito_user_pool_client" "main" {
 }
 
 # Grupo de administradores
-resource "aws_cognito_user_pool_group" "admins" {
+resource "aws_cognito_user_group" "admins" {
   name         = "admins"
   user_pool_id = aws_cognito_user_pool.main.id
   description  = "Admin users group with elevated privileges"
