@@ -112,6 +112,57 @@ resource "aws_lambda_permission" "api_gw_anonymous" {
   source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
 
+# Admin Register endpoint
+resource "aws_apigatewayv2_integration" "admin_register" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  integration_uri    = var.admin_register_lambda_invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "admin_register" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  route_key = "POST /admin/register"
+  target    = "integrations/${aws_apigatewayv2_integration.admin_register.id}"
+}
+
+# Admin Login endpoint
+resource "aws_apigatewayv2_integration" "admin_login" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  integration_uri    = var.admin_login_lambda_invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "admin_login" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  route_key = "POST /admin/login"
+  target    = "integrations/${aws_apigatewayv2_integration.admin_login.id}"
+}
+
+# Lambda permissions for Admin endpoints
+resource "aws_lambda_permission" "api_gw_admin_register" {
+  statement_id  = "AllowExecutionFromAPIGatewayAdminRegister"
+  action        = "lambda:InvokeFunction"
+  function_name = var.admin_register_lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "api_gw_admin_login" {
+  statement_id  = "AllowExecutionFromAPIGatewayAdminLogin"
+  action        = "lambda:InvokeFunction"
+  function_name = var.admin_login_lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+}
+
 # Get VPC and subnet information for VPC Link V2
 data "aws_lb" "nlb" {
   arn = var.nlb_arn

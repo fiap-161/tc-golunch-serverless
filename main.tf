@@ -99,6 +99,38 @@ module "lambda_anonymous" {
   source_file           = "anonymous"
 }
 
+module "lambda_admin_register" {
+  source = "./modules/lambda"
+
+  function_name         = "AdminRegister"
+  runtime               = var.runtime
+  handler               = "admin-register.handler"
+  log_retention_days    = var.log_retention_days
+  lambda_role_name      = var.lambda_role_name
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+  cognito_client_id     = module.cognito.user_pool_client_id
+  secret_key            = var.secret_key
+  source_dir            = "auth"
+  source_file           = "admin-register"
+}
+
+module "lambda_admin_login" {
+  source = "./modules/lambda"
+
+  function_name         = "AdminLogin"
+  runtime               = var.runtime
+  handler               = "admin-login.handler"
+  log_retention_days    = var.log_retention_days
+  lambda_role_name      = var.lambda_role_name
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+  cognito_client_id     = module.cognito.user_pool_client_id
+  secret_key            = var.secret_key
+  source_dir            = "auth"
+  source_file           = "admin-login"
+}
+
 module "api_gateway" {
   source = "./modules/api-gateway"
 
@@ -106,13 +138,19 @@ module "api_gateway" {
   stage_name         = var.stage_name
   log_retention_days = var.log_retention_days
 
-  # Auth endpoints
+  # Auth endpoints (Customer)
   register_lambda_invoke_arn     = module.lambda_register.lambda_invoke_arn
   register_lambda_function_name  = module.lambda_register.lambda_function_name
   login_lambda_invoke_arn        = module.lambda_login.lambda_invoke_arn
   login_lambda_function_name     = module.lambda_login.lambda_function_name
   anonymous_lambda_invoke_arn    = module.lambda_anonymous.lambda_invoke_arn
   anonymous_lambda_function_name = module.lambda_anonymous.lambda_function_name
+
+  # Admin endpoints
+  admin_register_lambda_invoke_arn     = module.lambda_admin_register.lambda_invoke_arn
+  admin_register_lambda_function_name  = module.lambda_admin_register.lambda_function_name
+  admin_login_lambda_invoke_arn        = module.lambda_admin_login.lambda_invoke_arn
+  admin_login_lambda_function_name     = module.lambda_admin_login.lambda_function_name
 
   # NLB for VPC Link to EKS - using data from terraform-infra
   nlb_arn                    = data.terraform_remote_state.infra.outputs.nlb_arn

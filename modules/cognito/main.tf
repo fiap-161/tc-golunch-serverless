@@ -1,6 +1,14 @@
 resource "aws_cognito_user_pool" "main" {
   name = var.user_pool_name
 
+  # Política de senha forte para admins e usuários
+  password_policy {
+    minimum_length    = 8
+    require_lowercase = true
+    require_uppercase = true
+    require_numbers   = true
+    require_symbols   = true
+  }
 
   verification_message_template {
     default_email_option = "CONFIRM_WITH_CODE"
@@ -44,4 +52,12 @@ resource "aws_cognito_user_pool_client" "main" {
   ]
 
   supported_identity_providers = ["COGNITO"]
+}
+
+# Grupo de administradores
+resource "aws_cognito_user_pool_group" "admins" {
+  name         = "admins"
+  user_pool_id = aws_cognito_user_pool.main.id
+  description  = "Admin users group with elevated privileges"
+  precedence   = 1
 }
