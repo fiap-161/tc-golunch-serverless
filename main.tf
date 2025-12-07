@@ -147,10 +147,10 @@ module "api_gateway" {
   anonymous_lambda_function_name = module.lambda_anonymous.lambda_function_name
 
   # Admin endpoints
-  admin_register_lambda_invoke_arn     = module.lambda_admin_register.lambda_invoke_arn
-  admin_register_lambda_function_name  = module.lambda_admin_register.lambda_function_name
-  admin_login_lambda_invoke_arn        = module.lambda_admin_login.lambda_invoke_arn
-  admin_login_lambda_function_name     = module.lambda_admin_login.lambda_function_name
+  admin_register_lambda_invoke_arn    = module.lambda_admin_register.lambda_invoke_arn
+  admin_register_lambda_function_name = module.lambda_admin_register.lambda_function_name
+  admin_login_lambda_invoke_arn       = module.lambda_admin_login.lambda_invoke_arn
+  admin_login_lambda_function_name    = module.lambda_admin_login.lambda_function_name
 
   # NLB for VPC Link to EKS - using data from terraform-infra
   nlb_arn                    = data.terraform_remote_state.infra.outputs.nlb_arn
