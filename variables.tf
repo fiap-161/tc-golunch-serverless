@@ -92,3 +92,22 @@ variable "certificate_arn" {
   type        = string
   default     = ""
 }
+
+# Microservice URLs for Lambda communication
+variable "core_service_url" {
+  description = "URL of the Core Service (for local development: http://localhost:8081)"
+  type        = string
+  default     = "http://localhost:8081"
+}
+
+variable "payment_service_url" {
+  description = "URL of the Payment Service (for local development: http://localhost:8082)"
+  type        = string
+  default     = "http://localhost:8082"
+}
+
+variable "operation_service_url" {
+  description = "URL of the Operation Service (for local development: http://localhost:8083)"
+  type        = string
+  default     = "http://localhost:8083"
+}

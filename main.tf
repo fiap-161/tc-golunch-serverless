@@ -2,7 +2,55 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.38.0"
+      module "lambda_anonymous" {
+  source = "./modules/lambda"
+
+  function_name         = "AnonymousUser"
+  runtime               = var.runtime
+  handler               = "anonymous.handler"
+  log_retention_days    = var.log_retention_days
+  lambda_role_name      = var.lambda_role_name
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+  cognito_client_id     = module.cognito.user_pool_client_id
+  secret_key            = var.secret_key
+  source_dir            = "auth"
+  source_file           = "anonymous"
+}
+
+# NEW: Service-to-Service Authentication Lambda
+module "lambda_service_auth" {
+  source = "./modules/lambda"
+
+  function_name         = "ServiceAuth"
+  runtime               = var.runtime
+  handler               = "service-auth.handler"
+  log_retention_days    = var.log_retention_days
+  lambda_role_name      = var.lambda_role_name
+  cognito_user_pool_id  = module.cognito.user_pool_id
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+  cognito_client_id     = module.cognito.user_pool_client_id
+  secret_key            = var.secret_key
+  source_dir            = "auth"
+  source_file           = "service-auth"
+  
+  # Service-specific environment variables
+  extra_environment_variables = {
+    # Service API Keys for validation
+    CORE_SERVICE_API_KEY       = "core-service-secure-api-key-2024"
+    PAYMENT_SERVICE_API_KEY    = "payment-service-secure-api-key-2024"  
+    OPERATION_SERVICE_API_KEY = "operation-service-secure-api-key-2024"
+    SERVICE_SECRET_KEY         = "microservices-shared-secret-key-2024"
+    
+    # Microservice URLs for communication from Lambda
+    CORE_SERVICE_URL      = var.core_service_url
+    PAYMENT_SERVICE_URL   = var.payment_service_url
+    OPERATION_SERVICE_URL = var.operation_service_url
+    
+    # Environment indicator
+    ENVIRONMENT = var.environment
+  }
+}.38.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -151,6 +199,10 @@ module "api_gateway" {
   admin_register_lambda_function_name = module.lambda_admin_register.lambda_function_name
   admin_login_lambda_invoke_arn       = module.lambda_admin_login.lambda_invoke_arn
   admin_login_lambda_function_name    = module.lambda_admin_login.lambda_function_name
+
+  # Service Authentication endpoint
+  service_auth_lambda_invoke_arn    = module.lambda_service_auth.lambda_invoke_arn
+  service_auth_lambda_function_name = module.lambda_service_auth.lambda_function_name
 
   # NLB for VPC Link to EKS - using data from terraform-infra
   nlb_arn                    = data.terraform_remote_state.infra.outputs.nlb_arn

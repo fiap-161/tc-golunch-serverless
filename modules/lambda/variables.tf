@@ -59,3 +59,9 @@ variable "secret_key" {
   type        = string
   sensitive   = true
 }
+
+variable "extra_environment_variables" {
+  description = "Additional environment variables for the Lambda function"
+  type        = map(string)
+  default     = {}
+}

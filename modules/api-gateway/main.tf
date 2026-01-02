@@ -163,6 +163,32 @@ resource "aws_lambda_permission" "api_gw_admin_login" {
   source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
 }
 
+# Service Authentication endpoint
+resource "aws_apigatewayv2_integration" "service_auth" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  integration_uri    = var.service_auth_lambda_invoke_arn
+  integration_type   = "AWS_PROXY"
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "service_auth" {
+  api_id = aws_apigatewayv2_api.lambda.id
+
+  route_key = "POST /validate-service"
+  target    = "integrations/${aws_apigatewayv2_integration.service_auth.id}"
+}
+
+# Lambda permissions for Service Auth endpoint  
+resource "aws_lambda_permission" "api_gw_service_auth" {
+  statement_id  = "AllowExecutionFromAPIGatewayServiceAuth"
+  action        = "lambda:InvokeFunction"
+  function_name = var.service_auth_lambda_function_name
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_apigatewayv2_api.lambda.execution_arn}/*/*"
+}
+
 # Get VPC and subnet information for VPC Link V2
 data "aws_lb" "nlb" {
   arn = var.nlb_arn
