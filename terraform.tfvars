@@ -5,7 +5,7 @@
 aws_region         = "us-east-1"
 runtime            = "nodejs20.x"
 log_retention_days = 30
-lambda_role_name   = "LabRole"
+lambda_role_name   = "aws_iam_role.lambda_execution.arn"
 
 # API Gateway Configuration
 api_name   = "unified-api-gateway"

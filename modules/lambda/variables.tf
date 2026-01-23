@@ -23,7 +23,7 @@ variable "log_retention_days" {
 variable "lambda_role_name" {
   description = "IAM role name for Lambda execution"
   type        = string
-  default     = "LabRole"
+  default     = aws_iam_role.lambda_execution.arn
 }
 
 variable "cognito_user_pool_id" {
