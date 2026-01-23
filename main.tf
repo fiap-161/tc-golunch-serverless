@@ -14,7 +14,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket = "api-gateway-bucket-serverless"
+    bucket = "api-gateway-bucket-serverless-golunch"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
