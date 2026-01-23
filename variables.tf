@@ -21,6 +21,7 @@ variable "log_retention_days" {
 variable "lambda_role_name" {
   description = "IAM role name for Lambda execution"
   type        = string
+  default     = "golunch-lambda-execution-role"
 }
 
 variable "api_name" {
