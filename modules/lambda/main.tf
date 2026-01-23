@@ -24,7 +24,7 @@ resource "aws_lambda_function" "lambda_function" {
 
   source_code_hash = data.archive_file.lambda_function.output_base64sha256
 
-  role = data.aws_iam_role.lambda_exec.arn
+  role = var.lambda_execution_role_arn
 
   environment {
     variables = {
@@ -39,10 +39,6 @@ resource "aws_cloudwatch_log_group" "lambda_function" {
   name = "/aws/lambda/${aws_lambda_function.lambda_function.function_name}"
 
   retention_in_days = var.log_retention_days
-}
-
-data "aws_iam_role" "lambda_exec" {
-  name = var.lambda_role_name
 }
 
 data "aws_region" "current" {}

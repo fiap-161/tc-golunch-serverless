@@ -35,7 +35,7 @@ provider "aws" {
 data "terraform_remote_state" "infra" {
   backend = "s3"
   config = {
-    bucket = "s3-golunch-infra-terraform-fiap"
+    bucket = "s3-golunch-infra-terraform-fiap-01"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
@@ -54,11 +54,13 @@ module "cognito" {
 module "lambda_register" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "RegisterUser"
   runtime               = var.runtime
   handler               = "register.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -70,11 +72,12 @@ module "lambda_register" {
 module "lambda_login" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
   function_name         = "LoginUser"
   runtime               = var.runtime
   handler               = "login.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -86,11 +89,12 @@ module "lambda_login" {
 module "lambda_anonymous" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
   function_name         = "AnonymousLogin"
   runtime               = var.runtime
   handler               = "anonymous.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -102,11 +106,13 @@ module "lambda_anonymous" {
 module "lambda_admin_register" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "AdminRegister"
   runtime               = var.runtime
   handler               = "admin-register.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -118,11 +124,13 @@ module "lambda_admin_register" {
 module "lambda_admin_login" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "AdminLogin"
   runtime               = var.runtime
   handler               = "admin-login.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -158,4 +166,24 @@ module "api_gateway" {
   vpc_id                     = data.terraform_remote_state.infra.outputs.vpc_id
   private_subnet_ids         = data.terraform_remote_state.infra.outputs.private_subnet_ids
   vpc_link_security_group_id = data.terraform_remote_state.infra.outputs.vpc_link_security_group_id
+}
+
+resource "aws_iam_role" "lambda_execution" {
+  name = "golunch-lambda-execution-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "lambda.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
+  role       = aws_iam_role.lambda_execution.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }

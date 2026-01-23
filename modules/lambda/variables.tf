@@ -20,12 +20,6 @@ variable "log_retention_days" {
   default     = 30
 }
 
-variable "lambda_role_name" {
-  description = "IAM role name for Lambda execution"
-  type        = string
-  default     = "LabRole"
-}
-
 variable "cognito_user_pool_id" {
   description = "Cognito User Pool ID"
   type        = string
@@ -58,4 +52,8 @@ variable "secret_key" {
   description = "Secret key for signing tokens"
   type        = string
   sensitive   = true
+}
+
+variable "lambda_execution_role_arn" {
+  type = string
 }
