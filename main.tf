@@ -54,11 +54,13 @@ module "cognito" {
 module "lambda_register" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "RegisterUser"
   runtime               = var.runtime
   handler               = "register.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -70,11 +72,12 @@ module "lambda_register" {
 module "lambda_login" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
   function_name         = "LoginUser"
   runtime               = var.runtime
   handler               = "login.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -86,11 +89,12 @@ module "lambda_login" {
 module "lambda_anonymous" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
   function_name         = "AnonymousLogin"
   runtime               = var.runtime
   handler               = "anonymous.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -102,11 +106,13 @@ module "lambda_anonymous" {
 module "lambda_admin_register" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "AdminRegister"
   runtime               = var.runtime
   handler               = "admin-register.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
@@ -118,11 +124,13 @@ module "lambda_admin_register" {
 module "lambda_admin_login" {
   source = "./modules/lambda"
 
+  lambda_execution_role_arn = aws_iam_role.lambda_execution.arn
+
+
   function_name         = "AdminLogin"
   runtime               = var.runtime
   handler               = "admin-login.handler"
   log_retention_days    = var.log_retention_days
-  lambda_role_name      = var.lambda_role_name
   cognito_user_pool_id  = module.cognito.user_pool_id
   cognito_user_pool_arn = module.cognito.user_pool_arn
   cognito_client_id     = module.cognito.user_pool_client_id
