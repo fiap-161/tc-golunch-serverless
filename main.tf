@@ -35,7 +35,7 @@ provider "aws" {
 data "terraform_remote_state" "infra" {
   backend = "s3"
   config = {
-    bucket = "s3-golunch-infra-terraform-fiap"
+    bucket = "s3-golunch-infra-terraform-fiap-01"
     key    = "terraform.tfstate"
     region = "us-east-1"
   }
