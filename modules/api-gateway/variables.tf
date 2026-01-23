@@ -94,3 +94,14 @@ variable "admin_login_lambda_function_name" {
   description = "Name of the Admin Login Lambda function"
   type        = string
 }
+
+# Service Authentication Lambda variables
+variable "service_auth_lambda_invoke_arn" {
+  description = "ARN to invoke the Service Auth Lambda function"
+  type        = string
+}
+
+variable "service_auth_lambda_function_name" {
+  description = "Name of the Service Auth Lambda function"
+  type        = string
+}

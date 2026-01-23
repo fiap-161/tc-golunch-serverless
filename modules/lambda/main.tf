@@ -27,11 +27,11 @@ resource "aws_lambda_function" "lambda_function" {
   role = data.aws_iam_role.lambda_exec.arn
 
   environment {
-    variables = {
+    variables = merge({
       COGNITO_USER_POOL_ID = var.cognito_user_pool_id
       COGNITO_CLIENT_ID    = var.cognito_client_id
       SECRET_KEY           = var.secret_key
-    }
+    }, var.extra_environment_variables)
   }
 }
 
